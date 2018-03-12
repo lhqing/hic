@@ -3,15 +3,17 @@ import os
 import fire
 
 
-def whole_genome(i, o, name, resolution, cpu, bychr=False, *args):
+def homer_matrix(i, o, name, resolution, cpu, bychr=False, *args):
     tag_dir = i
     out_dir = o
     if resolution == '':
         resolution = 1000000
     if cpu == '':
         cpu = 8
+    if bychr == '':
+        bychr = False
 
-    result_path = '.'.join(list(map(str, [name, *(i.strip('-') for i in args), resolution, 'tsv'])))
+    result_path = '.'.join(list(map(str, [name, *(str(i).strip('-') for i in args), resolution, 'tsv'])))
     save_path = os.path.join(out_dir, result_path)
     command = ['analyzeHiC', tag_dir, '-res', str(resolution), *args, '-cpu', str(cpu)]
     if bychr:
@@ -26,9 +28,13 @@ def whole_genome(i, o, name, resolution, cpu, bychr=False, *args):
                                   stdout=open(chr_save_path, 'w'),
                                   stderr=open(chr_save_path[:-3]+'err', 'w'))
     else:
-        subprocess.check_call(command,
-                              stdout=open(save_path, 'w'),
-                              stderr=open(save_path[:-3] + 'err', 'w'))
+        print(' '.join(map(str, command)))
+
+        print(save_path)
+
+        #subprocess.check_call(command,
+        #                      stdout=open(save_path, 'w'),
+        #                      stderr=open(save_path[:-3] + 'err', 'w'))
     return
 
 
