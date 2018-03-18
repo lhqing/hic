@@ -19,7 +19,8 @@ def homer2cooler(fp, save_dir, bin_size, bin_file, chrom_size_file):
             chrom2, start2 = j.split('-')
             end2 = int(start2) + bin_size
             if v > 0:
-                line_list = [chrom1, start1, str(end1), chrom2, start2, str(end2), str(v)]
+                line_list = [chrom1, start1, str(end1), chrom2, start2, str(end2), '1', str(v)]
+                # 1 for count, value actually store in the last column weight... That's stupid
                 fs.write('\t'.join(line_list) + '\n')
     fs.close()
 
